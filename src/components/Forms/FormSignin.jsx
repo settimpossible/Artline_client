@@ -131,23 +131,6 @@ class FormSignin extends Component {
                 color="black"
                 required
                 fullWidth
-                id="pseudo"
-                label="Pseudo"
-                name="pseudo"
-                autoComplete="pseudo"
-                autoFocus
-              />
-              <TextField
-                InputLabelProps={{
-                  style: {
-                    fontFamily: "Barlow",
-                  },
-                }}
-                variant="outlined"
-                margin="normal"
-                color="black"
-                required
-                fullWidth
                 id="email"
                 label="Adresse Email"
                 name="email"

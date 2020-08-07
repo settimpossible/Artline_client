@@ -3,6 +3,17 @@ import apiHandler from "../../api/apiHandler";
 import { withRouter } from "react-router-dom";
 import { withUser } from "../Auth/withUser";
 
+const niceButton = {
+  textTransform: "uppercase",
+  background: "black",
+  fontFamily: "arial",
+  color: "white",
+  fontSize: "0.7rem",
+  borderRadius: "12px",
+  margin: "5px",
+  padding: "8x",
+};
+
 class ActivityForm extends Component {
   state = {
     title: "",
@@ -41,13 +52,14 @@ class ActivityForm extends Component {
 
   edit() {
     apiHandler
-      .updateActivity({
+      .updateActivity(this.props.editData, {
         title: this.state.title,
         img: this.state.img,
         creator: this.props.creator,
         description: this.state.description,
         category: this.state.category,
         access: this.state.access,
+        url: this.state.url,
         public: this.state.public,
         duration: this.state.duration,
         owner_name: this.state.owner_name,
@@ -73,6 +85,8 @@ class ActivityForm extends Component {
         category: this.state.category,
         access: this.state.access,
         public: this.state.public,
+        url: this.state.url,
+
         duration: this.state.duration,
         owner_name: this.state.owner_name,
       })
@@ -94,12 +108,23 @@ class ActivityForm extends Component {
     // if (this.state.success) {
     //   return <Redirect to="/" />;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form
+        onSubmit={this.handleSubmit}
+        style={{
+          border: "solid 5px black",
+          height: "400px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
+          justifyContent: "space-evenly",
+        }}
+      >
         <h2>
           {mode === "edit" ? "Éditez une" : "Ajouter une nouvelle"} activité
         </h2>
         <div>
-          <div>
+          <div style={{ margin: "2% 0" }}>
             <label htmlFor="title">Nom de l'activité</label>
             <input
               type="text"
@@ -109,7 +134,7 @@ class ActivityForm extends Component {
               onChange={this.handleChange}
             />
           </div>
-          <div>
+          <div style={{ margin: "2% 0" }}>
             <label htmlFor="description">Description de l'activité</label>
             <input
               type="text"
@@ -119,7 +144,7 @@ class ActivityForm extends Component {
               onChange={this.handleChange}
             />
           </div>
-          <div>
+          <div style={{ margin: "2% 0" }}>
             <label className="label" htmlFor="category">
               Type d'activité
             </label>
@@ -152,7 +177,7 @@ class ActivityForm extends Component {
               </option>
             </select>
           </div>
-          <div>
+          <div style={{ margin: "2% 0" }}>
             <label className="label" htmlFor="public">
               Contenu adapté aux :
             </label>
@@ -191,7 +216,7 @@ class ActivityForm extends Component {
               onChange={this.handleChange}
             ></input>
           </div>
-          <div>
+          <div style={{ margin: "2% 0" }}>
             <label htmlFor="title">Activité conçue par :</label>
             <input
               type="text"
@@ -201,7 +226,7 @@ class ActivityForm extends Component {
               onChange={this.handleChange}
             />
           </div>
-          <div>
+          <div style={{ margin: "2% 0" }}>
             <label className="label" htmlFor="duration">
               Durée de l'activité{" "}
             </label>
@@ -230,7 +255,7 @@ class ActivityForm extends Component {
           </div>
         </div>
 
-        <button>Envoyez !</button>
+        <button style={niceButton}>Envoyez !</button>
       </form>
     );
   }

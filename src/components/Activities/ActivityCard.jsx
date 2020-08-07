@@ -11,6 +11,17 @@ import Rating from "@material-ui/lab/Rating";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 
+import ChildCareTwoToneIcon from "@material-ui/icons/ChildCareTwoTone";
+import HearingTwoToneIcon from "@material-ui/icons/HearingTwoTone";
+import SportsEsportsTwoToneIcon from "@material-ui/icons/SportsEsportsTwoTone";
+import MovieFilterTwoToneIcon from "@material-ui/icons/MovieFilterTwoTone";
+import MusicNoteTwoToneIcon from "@material-ui/icons/MusicNoteTwoTone";
+import PaletteTwoToneIcon from "@material-ui/icons/PaletteTwoTone";
+import LocalPlayTwoToneIcon from "@material-ui/icons/LocalPlayTwoTone";
+
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+
 import StarsTwoToneIcon from "@material-ui/icons/StarsTwoTone";
 import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
 
@@ -18,6 +29,24 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
 import ReviewActivity from "./ReviewActivity";
+
+const video = "Vidéo, flux en direct, programmes en différé";
+const audio = "Audio, radio, podcasts";
+const expo = "Expositions virtuelles";
+const show = "Concerts, spectacles";
+const game = "Jeux";
+const kid = "Enfants";
+
+const niceButton = {
+  textTransform: "uppercase",
+  background: "black",
+  fontFamily: "arial",
+  color: "white",
+  fontSize: "0.7rem",
+  borderRadius: "12px",
+  marginBottom: "8px",
+  padding: "8px",
+};
 
 const StyledRating = withStyles({
   iconFilled: {
@@ -28,25 +57,47 @@ const StyledRating = withStyles({
   },
 })(Rating);
 
-function AddToFav({ isFav, remove, add, loggedIn, activity }) {
+function AddToFav({
+  isFav,
+  remove,
+  add,
+  loggedIn,
+  activity,
+  reload,
+  reloadUser,
+}) {
   const [open, setOpen] = useState(false);
   const [mark, setMark] = useState(null);
+
+  function doReload() {
+    setOpen(false);
+    reload();
+    // reload();
+    // console.log(reload);
+    // reload();
+  }
 
   return (
     <div
       style={{
         position: "absolute",
-        top: "5px",
-        right: "5px",
-        width: "50px",
+        top: "0px",
+        right: "0px",
+        width: "297px",
+        padding: "5px 0px",
         textAlign: "center",
-        padding: "2px",
-        background: "rgba(255,255,255,0.7)",
+        background: "white",
+        borderTopLeftRadius: "15px",
+        borderTopRightRadius: "15px",
       }}
     >
       {loggedIn && (
         <span
-          style={{ display: "flex" }}
+          style={{
+            display: "flex",
+            paddingRight: "5px",
+            justifyContent: "flex-end",
+          }}
           onClick={() => (isFav ? remove() : add())}
         >
           <RateReviewTwoToneIcon onClick={() => setOpen(true)} />
@@ -65,7 +116,7 @@ function AddToFav({ isFav, remove, add, loggedIn, activity }) {
         open={open}
       >
         <div
-          className="center demescouilles"
+          className="center"
           style={{
             background: "white",
             height: "100%",
@@ -73,7 +124,7 @@ function AddToFav({ isFav, remove, add, loggedIn, activity }) {
             textAlign: "center",
           }}
         >
-          <ReviewActivity activity={activity} />
+          <ReviewActivity activity={activity} reload={() => doReload()} />
         </div>
       </Modal>
     </div>
@@ -156,7 +207,10 @@ export class ActivityCard extends Component {
       add: () => this.addFav(),
       loggedIn: this.props.context.isLoggedIn,
       editMode: this.props.editMode,
+      reload: () => this.props.reload(),
+      reloadUser: this.props.context.reloadData,
     };
+
     return (
       <>
         <div className="card">
@@ -165,7 +219,18 @@ export class ActivityCard extends Component {
           <Link to={`/activity/${activity._id}`}>
             <div className="card-image">
               <img className="card-image" src={activity.img} alt="test" />
-              <h2 className="title">{activity.title || "notitle"}</h2>
+              <h2
+                style={{
+                  fontFamily: "Barlow-light",
+                  fontSize: "1.5rem",
+                  borderRadius: "12px",
+                  textAlign: "center",
+                  margin: "5px",
+                  paddingTop: "10px",
+                }}
+              >
+                {activity.title || "notitle"}
+              </h2>
             </div>
           </Link>
 
@@ -175,14 +240,80 @@ export class ActivityCard extends Component {
                 style={{ cursor: "pointer" }}
                 onClick={() => this.toggleDescription()}
               >
-                <h3>Description</h3>
-                {this.state.showDescription && (
-                  <div>{activity.description}</div>
-                )}
+                <AllTags activity={activity} />
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: "Barlow-light",
+                      fontWeight: "500",
+                      fontSize: "0.8rem",
+                      borderRadius: "12px",
+                      textAlign: "center",
+                      margin: "5px",
+                      padding: "8x",
+                    }}
+                  >
+                    Description{" "}
+                  </h3>
+
+                  {this.state.showDescription ? <ExpandLess /> : <ExpandMore />}
+                  {this.state.showDescription && (
+                    <div
+                      style={{
+                        fontFamily: "Barlow-light",
+                        fontSize: "0.8rem",
+                        borderRadius: "12px",
+                        textAlign: "justify",
+                        margin: "5px",
+                        padding: "8x",
+                      }}
+                    >
+                      {activity.description}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
-            {/* <span>{activity.description}</span> */}
+            <div>
+              {this.props.editMode && (
+                <div
+                  style={niceButton}
+                  onClick={() => this.props.onEdit(activity._id)}
+                >
+                  ÉDITEZ
+                </div>
+              )}
+            </div>
+            <div>
+              {this.props.editMode && (
+                <div
+                  style={niceButton}
+                  onClick={() => this.props.onDelete(activity._id)}
+                >
+                  SUPPRIMEZ
+                </div>
+              )}
+            </div>
+            <div>
+              {activity.theme.map((e) => (
+                <button
+                  style={{
+                    textTransform: "uppercase",
+                    background: "black",
+                    fontFamily: "Barlow",
+                    color: "white",
+                    fontSize: "0.7rem",
+                    borderRadius: "12px",
+                    margin: "5px",
+                    padding: "8x",
+                  }}
+                  key={e}
+                >
+                  {e}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="card-stats">
@@ -207,24 +338,36 @@ export class ActivityCard extends Component {
             </div>
           </div>
         </div>
-        <div>
-          {this.props.editMode && (
-            <span onClick={() => this.props.onEdit(activity)}>ÉDITE-MOI</span>
-          )}
-        </div>
-        <div>
-          {this.props.editMode && (
-            <span onClick={() => this.props.onDelete(activity._id)}>
-              DELETE
-            </span>
-          )}
-        </div>
       </>
     );
   }
 }
 
 export default withUser(ActivityCard);
+
+export function AllTags({ activity }) {
+  let videoCond, audioCond, expoCond, showCond, gameCond, kidCond, accessCond;
+
+  if (activity?.type?.includes(video)) videoCond = true;
+  if (activity?.type?.includes(audio)) audioCond = true;
+  if (activity?.type?.includes(expo)) expoCond = true;
+  if (activity?.category?.includes(show)) showCond = true;
+  if (activity?.category?.includes(game)) gameCond = true;
+  if (activity?.public?.includes(kid)) kidCond = true;
+  if (activity?.access?.length === 0) accessCond = true;
+
+  return (
+    <div>
+      {videoCond && <MovieFilterTwoToneIcon />}
+      {audioCond && <MusicNoteTwoToneIcon />}
+      {expoCond && <PaletteTwoToneIcon />}
+      {showCond && <LocalPlayTwoToneIcon />}
+      {gameCond && <SportsEsportsTwoToneIcon />}
+      {kidCond && <ChildCareTwoToneIcon />}
+      {accessCond && <HearingTwoToneIcon />}
+    </div>
+  );
+}
 
 //   {/* <div className="round-image">
 //   <img className="user-img" src={activity.img} alt="activity" />

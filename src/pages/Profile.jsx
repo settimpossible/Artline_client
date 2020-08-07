@@ -4,6 +4,17 @@ import ActivityCard from "../components/Activities/ActivityCard";
 import { withUser } from "../components/Auth/withUser";
 import apiHandler from "../api/apiHandler.js";
 
+const niceButton = {
+  textTransform: "uppercase",
+  background: "black",
+  fontFamily: "arial",
+  color: "white",
+  fontSize: "0.7rem",
+  borderRadius: "12px",
+  margin: "5px",
+  padding: "8x",
+};
+
 export class Profile extends Component {
   state = {
     formMode: null,
@@ -62,31 +73,69 @@ export class Profile extends Component {
   render() {
     return (
       <div>
-        <h1>Le profil perso</h1>
-        {this.state.formMode !== null && (
-          <ActivityForm
-            mode={this.state.formMode}
-            creator={this.state.creator}
-            editData={this.state.data}
-            closeForm={() => this.closeForm()}
-          />
-        )}
-        <button onClick={() => this.createEvent()}>
-          Créer une nouvelle activité
-        </button>
-        <h2>ACTIVITÉS AJOUTÉES</h2>
-
-        {this.props.context.user.activities.map((activity, i) => (
-          <ActivityCard
-            key={i}
-            activity={activity}
-            editMode
-            onEdit={(data) => this.editEvent(data)}
-            onDelete={(id) => this.deleteEvent(id)}
-          />
-        ))}
         <div>
-          <h2>FAVORIS</h2>
+          <div>
+            <h1 className="center padding" style={{ paddingTop: "20px" }}>
+              Le profil perso
+            </h1>
+            <div
+              style={{
+                display: "grid",
+                margin: "0 auto",
+                width: "70vw",
+                placeItems: "center",
+              }}
+            >
+              {!this.state.formMode && (
+                <button style={niceButton} onClick={() => this.createEvent()}>
+                  Créer une nouvelle activité
+                </button>
+              )}
+              {this.state.formMode !== null && (
+                <ActivityForm
+                  mode={this.state.formMode}
+                  creator={this.state.creator}
+                  editData={this.state.data}
+                  closeForm={() => this.closeForm()}
+                />
+              )}
+            </div>
+
+            <h2 className="center padding" style={{ paddingTop: "20px" }}>
+              ACTIVITÉS AJOUTÉES
+            </h2>
+          </div>
+          <div
+            style={{
+              width: "100vw",
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-evenly",
+            }}
+          >
+            {this.props.context.user.activities.map((activity, i) => (
+              <ActivityCard
+                key={i}
+                activity={activity}
+                editMode
+                onEdit={(data) => this.editEvent(data)}
+                onDelete={(id) => this.deleteEvent(id)}
+              />
+            ))}
+          </div>
+        </div>
+        <h2 className="center padding" style={{ paddingTop: "20px" }}>
+          FAVORIS
+        </h2>
+
+        <div
+          style={{
+            width: "100vw",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-evenly",
+          }}
+        >
           {this.props.context.user.favorites.map((fav, i) => (
             <ActivityCard key={i} activity={fav} />
           ))}

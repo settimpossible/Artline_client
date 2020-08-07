@@ -2,18 +2,39 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import apiHandler from "../../api/apiHandler";
 import ReviewActivity from "../Activities/ReviewActivity";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Rating from "@material-ui/lab/Rating";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
-import SentimentDissatisfiedIcon from "@material-ui/icons/SentimentDissatisfied";
-import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
-import SentimentSatisfiedAltIcon from "@material-ui/icons/SentimentSatisfiedAltOutlined";
-import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import { withUser } from "../Auth/withUser";
+import Link from "@material-ui/core/Link";
+
+import { AllTags } from "./ActivityCard";
+
+const niceButton = {
+  textTransform: "uppercase",
+  background: "black",
+  fontFamily: "arial",
+  color: "white",
+  fontSize: "0.7rem",
+  borderRadius: "12px",
+  margin: "5px",
+  padding: "8x",
+};
+const commentsStyle = {
+  display: "flex",
+  justifyContent: "space-evenly",
+  alignItems: "space-evenly",
+  width: "100%",
+  margin: "0 auto",
+
+  flexWrap: "wrap",
+  height: "400px",
+  overflowY: "auto",
+  border: "solid 1px black",
+  borderRadius: "12px",
+};
 
 const StyledRating = withStyles({
   iconFilled: {
@@ -70,90 +91,104 @@ export class Activity extends Component {
     ).toFixed(2);
 
     return (
-      <div style={{ display: "flex", width: "100vw", flexWrap: "wrap" }}>
-        <div
+      <div>
+        <h1
           style={{
-            maxWidth: "800px",
             textAlign: "center",
-            margin: "2%",
-            display: "flex",
-            justifyContent: "flex-start",
-            flexDirection: "column",
+            marginTop: "3%",
+          }}
+        >
+          {this.state.activity.title}
+        </h1>{" "}
+        <h1
+          style={{
+            textAlign: "center",
           }}
         >
           {" "}
-          <h1>{this.state.activity.title}</h1>
-          {!!marks.length && (
-            <Box component="fieldset" mb={3} borderColor="transparent">
-              <Typography component="legend">
-                <h2>{mean}</h2>
-              </Typography>
-              <StyledRating
-                name="customized-color"
-                value={mean}
-                readOnly
-                getLabelText={(value) =>
-                  `${value} Heart${value !== 1 ? "s" : ""}`
-                }
-                precision={0.5}
-                icon={<FavoriteIcon fontSize="inherit" />}
-              />
-            </Box>
-          )}
+          <AllTags activity={this.state.activity} />
+        </h1>
+        <h1 className="center">
+          {!!marks.length && <MeanComponent mean={mean} />}
+        </h1>
+        <div
+          style={{
+            textAlign: "justify",
+            marginTop: "2%",
+            display: "flex",
+            justifyContent: "space-evenly",
+          }}
+        >
           <img
-            style={{ height: "300px" }}
-            src={this.state.activity.img}
-            alt={this.state.activity.description}
+            style={{ height: "350px" }}
+            src={this?.state?.activity?.img}
+            alt={this?.state?.activity?.description}
           />
-          <div>{this.state.activity.description}</div>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-          {this.state.activity.title !== "" && (
-            <ReviewActivity
-              activity={this.state.activity}
-              reload={() => this.getData()}
-            />
-          )}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignItems: "space-evenly",
-              width: "100%",
-              margin: "0 auto",
-
-              flexWrap: "wrap",
-              height: "400px",
-              overflowY: "auto",
-              border: "solid 1px black",
-              borderRadius: "12px",
-            }}
-          >
-            {this.invert(comments).map((comment) => (
-              <Comment key={comment._id} comment={comment} />
-            ))}
+          <div className="padding" style={{ padding: "30px" }}>
+            <p>
+              <div>Durée de l'activité : {this?.state?.activity?.duration}</div>{" "}
+            </p>
+            <div>
+              <p>Tags : </p>
+              {this?.state?.activity?.theme?.map((e) => (
+                <button style={niceButton} key={e}>
+                  {e}
+                </button>
+              ))}{" "}
+            </div>
+            <div style={{ width: "500px" }}>
+              <p style={{ fontWeight: "900" }}>Description:</p>
+              <p> {this?.state?.activity?.description}</p>
+            </div>
+            <Link href={this?.state?.activity?.url}>
+              Consulter la ressource
+            </Link>{" "}
           </div>
+        </div>
+        <div style={{}}>
+          {this.state.activity.title !== "" &&
+            this.props.context.isLoggedIn && (
+              <ReviewActivity
+                activity={this.state.activity}
+                reload={() => this.getData()}
+              />
+            )}
+        </div>
+        <div style={commentsStyle}>
+          {this.invert(comments).map((comment) => (
+            <Comment key={comment._id} comment={comment} />
+          ))}
         </div>
       </div>
     );
   }
 }
 
-function Comment(props) {
-  // apiHandler
+var imgArray = [
+  "/images/comment/1.png",
+  "/images/comment/2.png",
+  "/images/comment/3.png",
+  "/images/comment/4.png",
+  "/images/comment/5.png",
+  "/images/comment/6.png",
+  "/images/comment/7.png",
+  "/images/comment/8.png",
+];
 
+function Comment(props) {
   let { user, comment } = props.comment;
   console.log(user);
+  const src = imgArray[Math.floor(Math.random() * imgArray.length)];
   return (
     <div
       style={{
         display: "flex",
         minWidth: "200px",
-        height: "200px",
+        height: "100px",
         borderRadius: "12px",
         background: "white",
         margin: "2%",
+        flexDirection: "column",
         justifyContent: "space-evenly",
         padding: "20px",
       }}
@@ -166,21 +201,48 @@ function Comment(props) {
           justifyContent: "center",
         }}
       >
-        <div
-          style={{
-            border: "solid 1px black",
-            borderRadius: "15px",
-            height: "80px",
-            width: "40px",
-          }}
-        />
-        <div>{user.name || user.email.split("@")[0]}</div>
+        <div style={{}} />
+        <div>
+          <img
+            style={{
+              paddingTop: "5px",
+              height: "60px",
+            }}
+            src={src}
+            alt="comments"
+          />
+        </div>
+        <div>{user.email.split("@")[0]} 💬 dit :</div>
       </div>
-      <div style={{ display: "grid", placeItems: "center" }}>
-        &laquo; {comment} &raquo;{" "}
+      <div
+        style={{
+          display: "grid",
+          placeItems: "center",
+          fontFamily: "Barlow-Light",
+        }}
+      >
+        {comment}
       </div>
     </div>
   );
 }
 
-export default withRouter(Activity);
+export default withUser(withRouter(Activity));
+function MeanComponent({ mean }) {
+  return (
+    <Box component="fieldset" mb={3} borderColor="transparent">
+      <Typography component="legend">
+        <h2>{mean}</h2>
+      </Typography>
+      <StyledRating
+        name="customized-color"
+        value={Math.floor(mean)}
+        readOnly
+        getLabelText={(value) => `${value} Heart${value !== 1 ? "s" : ""}`}
+        max={10}
+        precision={0.5}
+        icon={<FavoriteIcon fontSize="inherit" />}
+      />
+    </Box>
+  );
+}

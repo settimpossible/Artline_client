@@ -178,9 +178,17 @@ export class ActivityDisplay extends Component {
             <ActivityCard activity={activity} />
           ))}
         </div>
-        <div className="center">
+        <div
+          className="center"
+          style={{
+            fontFamily: "Barlow",
+          }}
+        >
           <SearchBar
             className="margin search-bar "
+            style={{
+              fontFamily: "Barlow",
+            }}
             placeholder="Rechercher une activité..."
             value={this.state.searchValue}
             onChange={(value) => this.handleSearch(value)}
@@ -377,7 +385,11 @@ export class ActivityDisplay extends Component {
           }}
         >
           {this.state.activities.map((activity) => (
-            <ActivityCard key={activity._id} activity={activity} />
+            <ActivityCard
+              key={activity._id}
+              reload={this.props.reload}
+              activity={activity}
+            />
           ))}
         </div>
       </div>

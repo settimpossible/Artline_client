@@ -117,36 +117,84 @@ export class ReviewActivity extends Component {
 
       <Box component="fieldset" mb={3} borderColor="transparent">
         {/* <Typography component="legend"</Typography> */}
-        <h1 style={{ padding: "20px 0" }}>C koi les bails</h1>
-        <StyledRating
-          max={10}
-          name="mark"
-          defaultValue={2}
-          onChange={(e) => this.handleChange(e)}
-          getLabelText={(value) => `${value} Heart${value !== 1 ? "s" : ""}`}
-          precision={0.5}
-          icon={<FavoriteIcon fontSize="inherit" />}
-        />
+        <h1 className="center" style={{ paddingTop: "70px" }}>
+          Partagez votre avis :
+        </h1>
+        <div className="center">
+          <StyledRating
+            max={10}
+            name="customized-color"
+            name="mark"
+            onChange={(e) => this.handleChange(e)}
+            getLabelText={(value) => `${value} Heart${value !== 1 ? "s" : ""}`}
+            precision={0.5}
+            icon={<FavoriteIcon fontSize="inherit" />}
+          />
+        </div>
         {!!this.state.mark && (
           <>
-            <h2>Votre note :</h2>
-            <div>{this.state.mark}</div>
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                textAlign: "center",
+                marginLeft: "20rem",
+                marginRight: "20rem",
+
+                flexDirection: "column",
+              }}
+              lassName="center"
+            >
+              Votre note : {this.state.mark}
+            </h2>
           </>
         )}
-        <h1 style={{ padding: "20px 0" }}>Lache ton commentaire :</h1>
-        <TextareaAutosize
-          name="comment"
+        <div
           style={{
-            width: "100%",
-            fontFamily: "Barlow",
+            display: "flex",
+            justifyContent: "center",
+            textAlign: "center",
+            marginLeft: "20rem",
+            marginRight: "20rem",
+
+            flexDirection: "column",
           }}
-          aria-label="empty textarea"
-          placeholder="Votre mot doux..."
-          rows={4}
-          value={this.state.comment}
-          onChange={(e) => this.handleChange(e)}
-        />
-        <button onClick={this.handleSubmit}>Envoyer votre revue !</button>
+        >
+          <p className={{ padding: "20px 0" }}>
+            Laissez un commentaire sur l'activité :
+          </p>
+          <div
+            style={{
+              fontFamily: "Barlow",
+            }}
+          >
+            <TextareaAutosize
+              name="comment"
+              style={{
+                fontFamily: "Barlow",
+                width: "100%",
+              }}
+              aria-label="empty textarea"
+              placeholder="Votre mot doux..."
+              rows={4}
+              value={this.state.comment}
+              onChange={(e) => this.handleChange(e)}
+            />
+          </div>
+          <button
+            style={{
+              backgroundColor: "black",
+              fontFamily: "Barlow",
+              justifyContent: "center",
+              textAlign: "center",
+              alignItems: "center",
+              color: "white",
+            }}
+            onClick={this.handleSubmit}
+          >
+            PARTAGEZ
+          </button>
+        </div>
       </Box>
     );
   }

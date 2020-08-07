@@ -3,14 +3,20 @@ import ActivityDisplay from "../components/Activities/ActivityDisplay";
 import apiHandler from "../api/apiHandler";
 
 class Home extends React.Component {
-  state = {
-    activities: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = { activities: [] };
+    this.loadActivities = this.loadActivities.bind(this);
+  }
 
-  componentDidMount() {
+  loadActivities() {
     apiHandler.getActivities().then((data) => {
       this.setState({ activities: data });
     });
+  }
+
+  componentDidMount() {
+    this.loadActivities();
   }
 
   render() {
@@ -28,7 +34,10 @@ class Home extends React.Component {
           </div>
         </div>
         {this.state.activities.length > 0 && (
-          <ActivityDisplay activities={this.state.activities} />
+          <ActivityDisplay
+            reload={this.loadActivities}
+            activities={this.state.activities}
+          />
         )}
       </div>
     );
