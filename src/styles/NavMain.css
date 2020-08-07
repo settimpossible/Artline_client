@@ -1,17 +1,40 @@
 .NavMain {
-  background-color: transparent;
+  background-color: white;
   color: rgb(57, 57, 57);
   display: flex;
   align-items: center;
   padding: 20px;
   height: 70px;
+  width:100vw;
+  position: sticky;
+  top:0;
+  z-index: 99;
+}
+
+.NavMain a {
+font-family:"Barlow-Light";
+font-size: 14px;
 }
 
 .NavMain .nav-list {
   margin-left: auto;
   display: flex;
+  justify-content:flex-end;
+  align-items: flex-start;
 }
 
 .NavMain .nav-list li:not(:last-child) {
-  margin-right: 20px;
+  margin-right: 5px;
 }
+
+.NavMain .logo {
+width: 60px;
+}
+
+.NavMain .site-title {
+  display: flex;
+  justify-self: start;
+  align-items: flex-end;
+  font-size: 1em;
+}
+

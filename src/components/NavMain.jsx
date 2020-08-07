@@ -22,18 +22,28 @@ const NavMain = (props) => {
   return (
     <nav className="NavMain">
       <NavLink exact to="/">
-        <h3 className="logo">App name</h3>
+        <div className="site-title">
+          <img className="logo" src="../../images/1.png" alt="Logo ARTLINE" />
+          <h2 className="logo">ART'LINE</h2>
+        </div>
       </NavLink>
       <ul className="nav-list">
         {context.isLoggedIn && (
           <React.Fragment>
             <li>
               <NavLink to="/profile">
-                {context.user && context.user.email}
+                <span style={{ fontFamily: "Barlow-Light", fontSize: "14px" }}>
+                  {context.user && context.user.email}
+                </span>
               </NavLink>
             </li>
             <li>
-              <p onClick={handleLogout}>Logout</p>
+              <span
+                style={{ fontFamily: "Barlow-Light", fontSize: "14px" }}
+                onClick={handleLogout}
+              >
+                Logout
+              </span>
             </li>
           </React.Fragment>
         )}

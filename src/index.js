@@ -8,7 +8,7 @@ import "./styles/reset.css";
 import "./styles/global.css";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter onUpdate={() => window.scrollTo(0, 0)}>
     <UserProvider>
       <App />
     </UserProvider>

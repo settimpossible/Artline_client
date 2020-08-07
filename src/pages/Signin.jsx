@@ -1,8 +1,10 @@
 import React from "react";
 import FormSignin from "../components/Forms/FormSignin";
+import "../styles/signin.css";
 
 const Signin = (props) => {
-  return <FormSignin />;
+  console.log(props);
+  return <FormSignin {...props} />;
 };
 
 export default Signin;

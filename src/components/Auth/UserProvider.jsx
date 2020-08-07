@@ -10,13 +10,19 @@ class UserProvider extends Component {
   };
 
   componentDidMount() {
+    this.getUserData();
+  }
+
+  getUserData() {
     apiHandler
       .isLoggedIn()
       .then((data) => {
+        console.log(data);
         this.setState({ user: data, isLoggedIn: true, isLoading: false });
       })
       .catch((error) => {
         console.log(error);
+
         this.setState({ user: null, isLoggedIn: false, isLoading: false });
       });
   }
@@ -36,6 +42,7 @@ class UserProvider extends Component {
       user: this.state.user,
       setUser: this.setUser,
       removeUser: this.removeUser,
+      reloadData: () => this.getUserData(),
       isLoggedIn: this.state.isLoggedIn,
       isLoading: this.state.isLoading,
     };
